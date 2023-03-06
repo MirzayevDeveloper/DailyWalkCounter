@@ -22,10 +22,7 @@ while (isActive)
     switch (choice)
     {
         case 1:
-            for (int i = 0; i < 10; i++)
-            {
                 RandomAdd();
-            }
             break;
         case 2:
             break;

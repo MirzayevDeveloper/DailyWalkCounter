@@ -6,6 +6,7 @@
         {
             IList<IPerson> list = GetAllPerson() ?? new List<IPerson> { };
             list.Add(person);
+
             await DBHelper.WriteToDB(list, DBHelper.PersonPath);
         }
 

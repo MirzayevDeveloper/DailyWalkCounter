@@ -8,6 +8,6 @@ namespace Application.Interfaces
         Task<bool> DeleteAddressByIdAsync(Guid addressId);
         Task<bool> UpdateAddressAsync(IAddress address);
         IAddress GetAddressById(Guid addressId);
-        IList<IAddress> GetAllAddresses(); 
+        List<IAddress> GetAllAddresses(); 
     }
 }
