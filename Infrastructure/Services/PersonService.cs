@@ -4,15 +4,21 @@
     {
         public async Task AddPersonAsync(IPerson person)
         {
-            IList<IPerson> list = GetAllPerson() ?? new List<IPerson> { };
+            var mutex = new Mutex();
+
+            List<IPerson> list = GetAllPerson() ?? new List<IPerson> { };
             list.Add(person);
 
+            mutex.WaitOne();
+
             await DBHelper.WriteToDB(list, DBHelper.PersonPath);
+
+            mutex.ReleaseMutex();
         }
 
         public async Task<bool> DeletePersonById(Guid personId)
         {
-            IList<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
+            List<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
 
             IPerson? person = list.FirstOrDefault(person => person.Id == personId);
 
@@ -21,24 +27,23 @@
             return list.Remove(person);
         }
 
-        public  IList<IPerson>? GetAllPerson()
+        public List<IPerson>? GetAllPerson()
         {
-            IList<IPerson>? list = JsonConvert.DeserializeObject<IList<IPerson>>
-                (File.ReadAllText(DBHelper.PersonPath));
+            List<IPerson>? list =  DBHelper.ReadFromDB<IPerson>(DBHelper.PersonPath);
 
             return list;
         }
 
         public IPerson? GetPersonById(Guid personId)
         {
-            IList<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
+            List<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
 
             return list.FirstOrDefault(person => person.Id == personId);
         }
 
         public async Task<bool> UpdatePersonAsync(IPerson person)
         {
-            IList<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
+            List<IPerson> list = GetAllPerson() ?? new List<IPerson>() { };
 
             IPerson? per = list.FirstOrDefault(p => p.Id == person.Id);
 
@@ -53,7 +58,7 @@
 
         public static List<IPerson> GetFiveTopPeople()
         {
-            IList<IPerson>? people = JsonConvert.DeserializeObject<IList<IPerson>>
+            List<IPerson>? people = JsonConvert.DeserializeObject<List<IPerson>>
                 (File.ReadAllText(DBHelper.PersonPath));
 
             var list3 = (from obj in people
@@ -64,7 +69,7 @@
 
         public static List<IPerson> GetPeopleDistanceDescending()
         {
-            IList<IPerson>? people = JsonConvert.DeserializeObject<IList<IPerson>>
+            List<IPerson>? people = JsonConvert.DeserializeObject<List<IPerson>>
                 (File.ReadAllText(DBHelper.PersonPath));
 
             var list3 = (from obj in people
@@ -75,7 +80,7 @@
 
         public static List<IGrouping<string, IPerson>> GetPeopleByAddress()
         {
-            IList<IPerson>? people = JsonConvert.DeserializeObject<IList<IPerson>>
+            List<IPerson>? people = JsonConvert.DeserializeObject<List<IPerson>>
                 (File.ReadAllText(DBHelper.PersonPath));
 
             var address = (from obj in people

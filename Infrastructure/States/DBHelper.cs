@@ -8,7 +8,11 @@
 
         public static async Task WriteToDB<T>(IList<T> list, string path)
         {
-            File.WriteAllText(path, JsonConvert.SerializeObject(list, Formatting.Indented));
+            File.WriteAllText(path, JsonConvert.SerializeObject(list as List<T>, Formatting.Indented));
+        }
+        public static List<T>? ReadFromDB<T>(string path)
+        {
+            return JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(path));
         }
     }
 }
