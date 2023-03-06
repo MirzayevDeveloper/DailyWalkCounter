@@ -37,8 +37,8 @@ namespace Infrastructure.Services
 
         public List<IAddress>? GetAllAddresses()
         {
-            List<IAddress>? addresses = JsonConvert.DeserializeObject<List<IAddress>>
-                (File.ReadAllText(DBHelper.AddressPath));
+            List<IAddress>? addresses = JsonConvert
+                .DeserializeObject<List<IAddress>>(File.ReadAllText(DBHelper.AddressPath));
 
             return addresses;
         }

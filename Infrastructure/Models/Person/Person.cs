@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Models.Person
 {
-    public class Person1 : IPerson
+    public class Person : IPerson
     {
         public Guid Id { get ; set ; }
         public string FullName { get; set; } = "Unknown";

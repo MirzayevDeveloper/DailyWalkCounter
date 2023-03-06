@@ -1,5 +1,8 @@
 ﻿// Welcome
 
+using Domain.Interfaces;
+using Infrastructure.Models.Addresses;
+using Infrastructure.Models.Person;
 using Infrastructure.Services;
 using Tynamix.ObjectFiller;
 
@@ -39,20 +42,18 @@ while (isActive)
 
 void RandomAdd()
 {
-
-
-
     PersonService personService = new PersonService();
-    var task = personService.AddPersonAsync(person);
 
+    var task = personService.AddPersonAsync(
+        CreatePersonFiller(CreateAddressFiller().Create()).Create());
 }
 
-Filler<Person> CreateLanguageFiller(DateTimeOffset dates)
+Filler<Person> CreatePersonFiller(IAddress address)
 {
-    var filler = new Filler<Language>();
+    var filler = new Filler<Person>();
 
-    filler.Setup()
-        .OnType<DateTimeOffset>().Use(dates);
+    filler.Setup().OnType<IAddress>().Use(address); 
 
     return filler;
 }
+Filler<Address> CreateAddressFiller() => new Filler<Address>();
